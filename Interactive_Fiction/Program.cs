@@ -8,27 +8,40 @@ namespace Interactive_Fiction
 {
 	class Program
 	{
+		static char[] splits = {';'};
 		static string[] story = new string[11];
+		static bool gameOver = false;
+		static string userInput = Console.ReadLine();
 		
 		static void Main(string[] args)
 		{
 			Pages();
-			Console.WriteLine(story[1]);
+			//Console.WriteLine(story[1]);
 			Console.ReadKey();
+			Console.ReadLine();
+			Pages();
+
 		}
 
 		static void GameLoop()
 		{
-			
+			string userInput = Console.ReadLine();
+
+			while (gameOver == false)
+			{
+
+			}
+			/*if (userInput == Choice(story[]))
+			{ }*/
 		}
 
 		static void Pages()
 		{
-			string userInput = Console.ReadLine();
+		
 
 			story[0] = "Title Screen";
-			story[1] = "Page 1, You wake up in the middle of no where unsure how or why you're here,as you start to regan you ability to stand you begin to analysis your suroundings all old dead tree's and a few boulders,you find an old hatchet beside you";
-			//string[] page = story[1].Split(' ');
+			story[1] = "Page 1,You wake up in the middle of no where unsure how or why you're here, as you start to regan you ability to stand;you begin to analysis your suroundings all old dead tree's and a few boulders.;2;3";
+			//string[] page = story[1].Split(splits);
 			story[2] = "Page 2";
 			story[3] = "Page 3";
 			story[4] = "Page 4";
@@ -39,7 +52,7 @@ namespace Interactive_Fiction
 			story[9] = "Page 9";
 			story[10] = "Page 10";
 
-
+			Console.WriteLine(story[1]);
 		}
 
 
@@ -47,9 +60,20 @@ namespace Interactive_Fiction
 
 
 
-		static void Choice()
+		static void Choice(string[] story)
 		{
-			
+			if (story[1] == userInput)
+			{
+				if (userInput == "A")
+				{
+					Console.WriteLine(story[2]);
+					Console.ReadKey();
+				}
+				if (userInput == "B")
+				{
+					
+				}
+			}
 		}
 	}
 
