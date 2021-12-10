@@ -15,6 +15,7 @@ namespace Interactive_Fiction
 		static bool gameOver = false;
 		static int currentpage;
 		static string plot;
+		static bool isTitleUp;
 		static string option1;
 		static string option2;
 		static string choice1;
@@ -25,11 +26,11 @@ namespace Interactive_Fiction
 		static int Parse2;
 		static int Parse3;
 		static int Parse4;
-		static ConsoleKey playerInput;
+		static string playerInput;
 		static string StoryFile = "Story.txt";
-		static int Save = 1;
+		static int Save;
 		static string saveData;
-		static int savedPage = 0;
+		static int savedPage;
 
 		static void Main(string[] args)
 		{
@@ -50,10 +51,10 @@ namespace Interactive_Fiction
 			plot = contents[0];
 			choice1 = contents[1];
 			choice2 = contents[2];
-			saveGame = contents[3];
-			quit = contents[4];
-/*			choice1 = contents[5];
-			choice2 = contents[6];*/
+			//saveGame = contents[3];
+			//quit = contents[4];
+			/*			choice1 = contents[5];
+						choice2 = contents[6];*/
 			Console.WriteLine(plot);
 			//Console.WriteLine(option1);
 			//Console.WriteLine(option2);
@@ -64,31 +65,33 @@ namespace Interactive_Fiction
 
 		static void ReadPlayerInput()
 		{
+			Parse1 = int.Parse(contents[1]);
+			Parse2 = int.Parse(contents[2]);
 
 			//Parse is turning a string into a number so a = 1 b = 9 or 4, etc.
 			//parse uses user input to determine the number like a or b will change into one of the two numbers specified 
 			//switch case is used for a if/else statment when you want to test and there are 3 or more options
 			//switch statment needs to match, so playerInput is a which will mean current page = whatever a is 
 			//playerInput = Console.ReadKey();
-			if (playerInput == ConsoleKey.A)
-			{
-				Parse1 = int.Parse(contents[1]);
-			}
-			if (playerInput == ConsoleKey.B)
-			{
-				Parse2 = int.Parse(contents[2]);
-			}
-			if (playerInput == ConsoleKey.C)
-			{
-				Parse3 = int.Parse(contents[3]);
-			}
-			if (playerInput == ConsoleKey.D)
-			{
-				Parse4 = int.Parse(contents[4]);
-			}
-
-			
-/*			switch (playerInput)
+			/*			if (playerInput == ConsoleKey.A)
+						{
+							Parse1 = int.Parse(contents[1]);
+						}
+						if (playerInput == ConsoleKey.B)
+						{
+							Parse2 = int.Parse(contents[2]);
+						}
+						if (playerInput == ConsoleKey.C)
+						{
+							Parse3 = int.Parse(contents[3]);
+						}
+						if (playerInput == ConsoleKey.D)
+						{
+							Parse4 = int.Parse(contents[4]);
+						}
+			*/
+			playerInput = Console.ReadLine();
+			switch (playerInput)
 			{
 				case "a":
 					currentpage = Parse1;
@@ -100,9 +103,11 @@ namespace Interactive_Fiction
 				case "c":
 					CheckIfSaved();
 					SaveFile();
-					currentpage = Parse3;
 					break;
-			}*/
+				case "d":
+					StartingMenu();
+					break;
+			}
 
 
 		}
@@ -124,6 +129,7 @@ namespace Interactive_Fiction
 		}
 		static void StartingMenu()
 		{
+			//isTitleUp = true;
 			Console.WriteLine("                                                                        ");
 			Console.WriteLine("  ║   ║ ╔╗      ║  ║   ║  ╔╗      ║  ╔═══╗   ║           ║   ╔╗      ║  ");
 			Console.WriteLine("  ║   ║ ║ ║     ║  ║  ║   ║ ║     ║  ║   ║   ║           ║   ║ ║     ║  ");
@@ -135,31 +141,66 @@ namespace Interactive_Fiction
 			Console.WriteLine("                                                                        ");
 
 			Console.WriteLine("A) START NEW GAME?");
-			Console.WriteLine("A) Load");
+			Console.WriteLine("b) Load");
 			Console.WriteLine("C) Options");
 			Console.WriteLine("D) QUIT");
-			if (playerInput == ConsoleKey.A)
+			switch (playerInput)
 			{
-				Parse1 = int.Parse(contents[1]);
-			}
-			if (playerInput == ConsoleKey.B)
-			{
-				Parse2 = int.Parse(contents[2]);
-			}
-			if (playerInput == ConsoleKey.C)
-			{
-				Parse3 = int.Parse(contents[3]);
-			}
-			if (playerInput == ConsoleKey.D)
-			{
-				Parse4 = int.Parse(contents[4]);
-			}
+				case "a":
+					Story();
+					break;
+
+				case "b":
+					Load();
+					break;
+			
+				case "c":
+					CheckIfSaved();
+					SaveFile();
+					currentpage = Parse3;
+					break;
+				case "d":
+					System.Environment.Exit(0);
+					return;
+			}   
+			
+/*			     //playerInput = ConsoleKeyInfo;
+				 if (playerInput == ConsoleKey.D1)
+				 {
+					 //If title is active then D1 = New Game
+					 if (isTitleUp == true)
+					 {
+						 isTitleUp = false;
+					 }
+					 else
+					 {
+						 //Page number changes to slected choice
+						 currentpage = int.Parse(choice1);
+					 }
+				 }
+
+				 if (playerInput == ConsoleKey.A)
+				 {
+					 Parse1 = int.Parse(contents[currentpage]);
+				 }
+				 if (playerInput == ConsoleKey.B)
+				 {
+					 Parse2 = int.Parse(contents[currentpage]);
+				 }
+				 if (playerInput == ConsoleKey.C)
+				 {
+					 Parse3 = int.Parse(contents[currentpage]);
+				 }
+				 if (playerInput == ConsoleKey.D)
+				 {
+					 Parse4 = int.Parse(contents[currentpage]);
+				 }*/
 			gameOver = false;
 		}
 
 		static void CheckDeath()
 		{
-			if (story[currentpage].Contains("Died") || story[currentpage].Contains("Passed"))
+			if (story[currentpage].Contains("Died") || story[currentpage].Contains("Perish") || story[currentpage].Contains("death"))
 			{
 				gameOver = true;
 				GameOver();
@@ -169,13 +210,13 @@ namespace Interactive_Fiction
 		}
 		static void SaveFile()
 		{
-			using (StreamWriter sd = new StreamWriter("SaveFile.txt"))
+			using (StreamWriter sd = new StreamWriter("SaveFile.txt", true))
 			{
 				Save = currentpage;
 				sd.WriteLine(currentpage.ToString());
 				sd.WriteLine(Save.ToString());
 				sd.WriteLine(File.GetLastWriteTime("SaveFile.txt"));
-				Console.WriteLine("You Hvae Saved The Game!!!!");
+				Console.WriteLine("You Have Saved The Game!!!!");
 			}
 		}
 		static void Load()
@@ -209,7 +250,6 @@ namespace Interactive_Fiction
 		{
 			while (gameOver == false)
 			{
-				StartingMenu();
 				Story();
 				ReadPlayerInput();
 				Console.Clear();
