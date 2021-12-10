@@ -101,8 +101,8 @@ namespace Interactive_Fiction
 					currentpage = Parse2;
 					break;
 				case "c":
-					CheckIfSaved();
 					SaveFile();
+					CheckIfSaved();
 					break;
 				case "d":
 					StartingMenu();
@@ -129,6 +129,7 @@ namespace Interactive_Fiction
 		}
 		static void StartingMenu()
 		{
+			gameOver = false;
 			//isTitleUp = true;
 			Console.WriteLine("                                                                        ");
 			Console.WriteLine("  ║   ║ ╔╗      ║  ║   ║  ╔╗      ║  ╔═══╗   ║           ║   ╔╗      ║  ");
@@ -155,8 +156,8 @@ namespace Interactive_Fiction
 					break;
 			
 				case "c":
-					CheckIfSaved();
 					SaveFile();
+					CheckIfSaved();
 					currentpage = Parse3;
 					break;
 				case "d":
